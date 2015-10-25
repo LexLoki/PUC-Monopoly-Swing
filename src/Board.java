@@ -8,21 +8,22 @@ public class Board extends JPanel {
 
 	//private Image bgImg = new ImageIcon("tabuleiroRJ.jpg").getImage();
 	private Image bgImg;
+	private final String path = "assets/tabuleiroRJ.jpg";
 	
 	public Board(Dimension size){
-		
 		super();
-		Dimension sSize = GlobalData.getInstance().getScreenSize();
-		this.setBounds((sSize.width-size.width)/2, (sSize.height-size.height)/2, size.width, size.height);
+		System.out.println(size);
+		
+		//Dimension sSize = GlobalData.getInstance().getScreenSize();
+		this.setSize(size);
+		//this.setBounds((sSize.width-size.width)/2, (sSize.height-size.height)/2, size.width, size.height);
 		try{
-			bgImg = ImageIO.read(new File("assets/tabuleiroRJ.jpg"));
+			bgImg = ImageIO.read(new File(path));
 		}
 		catch(IOException e){
 			System.out.println(e.getMessage());
 			System.exit(1);
 		}
-		
-		setSize(size);
 	}
 	
 	public void paintComponent(Graphics g){
