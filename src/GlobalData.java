@@ -25,6 +25,10 @@ public final class GlobalData {
 		sorteRevesFile = GlobalData.listOfFiles("assets/sorteReves");
 	}
 	
+	public File[] getSpaceFiles(){
+		return this.territoriesFile;
+	}
+	
 	private static File[] listOfFiles(String path){
 		System.out.println("here");
 		File folder = new File(path);

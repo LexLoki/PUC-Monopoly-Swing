@@ -1,12 +1,12 @@
 package Model;
 
-public class PropertyModel {
+public class PlaceModel {
 	
 	private int id;
 	private String name;
 	
 	
-	public PropertyModel(int id, String name){
+	public PlaceModel(int id, String name){
 		this.id = id;
 		this.name = name;
 	}

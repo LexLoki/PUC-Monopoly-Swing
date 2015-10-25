@@ -5,22 +5,23 @@ import java.awt.*;
 public class GameFrame extends JFrame {
 	
 	private Board gameBoard;
+	private Dimension insideSize;
 	
 	public GameFrame(int nPlayers){
 		super("Game");
 		this.setLayout(null);
-		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		//Dimension size = GlobalData.getInstance().getScreenSize();
 		Dimension size = GameFrame.getBestFrameFor(1000, 750);
-		//this.setSize(size.height*4/5, size.width*4/5);
-		this.setSize(size);
-		int d = (int) (0.6*size.width);
+		setSize(size);
+		setVisible(true);
+		int marginTop = getInsets().top;
+		Dimension wholeSize = new Dimension(size.width,size.height+marginTop);
+		this.setSize(wholeSize);
+		int d = (int) (0.65*size.width);
 		gameBoard = new Board(new Dimension(d,d));
 		GameFrame.setPositionBottomLeft(gameBoard, 0, size.height);
 		getContentPane().add(gameBoard);
-		setVisible(true);
-		System.out.println(getSize());
-		System.out.println(gameBoard.getBounds());
+		this.repaint();
+		insideSize = size;
 	}
 	
 	static private void setPositionCenter(JPanel p, int x, int y){
@@ -41,8 +42,9 @@ public class GameFrame extends JFrame {
 	}
 	
 	static private Dimension getBestFrameFor(int width, int height){
+		
 		Dimension size = GlobalData.getInstance().getScreenSize();
-		size = new Dimension(size.width*9/10, size.height*9/10);
+		size = new Dimension(size.width*9/10, size.height*85/100);
 		float sx = (float)(size.width) / width;
 		float sy = (float)(size.height) / height;
 		float s = sx > sy ? sy : sx;
