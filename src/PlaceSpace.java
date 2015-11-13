@@ -1,11 +1,9 @@
-
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -14,14 +12,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import Model.PlaceModel;
-import Model.TerritoryModel;
 
 public class PlaceSpace extends BoardSpace implements MouseListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	//HOW COULD I PUT FINAL IN PRIVATE FINAL IMAGE IMG
 	private Image img;
 	private GamePlayer owner = null;
-	private Point rectLoc;
-	private PlaceModel m;
+	private final Rectangle rectMark;
+	private final PlaceModel m;
 	
 	public PlaceSpace(Dimension d, PlaceModel model, int local){
 		super(d, local);
@@ -35,12 +37,8 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 			System.exit(1);
 		}
 		this.addMouseListener(this);
-		if(local%2 == 0){
-			rectLoc = new Point(d.height/2, d.width*3/4);
-		}
-		else{
-			rectLoc = new Point(d.width/2, d.height*3/4);
-		}
+		Dimension dd = this.getSize();
+		this.rectMark = new Rectangle(dd.width/20, dd.height/20, dd.width*18/20, dd.height*18/20);
 	}
 	
 	public Image getImage(){
@@ -59,6 +57,10 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 		return m;
 	}
 	
+	public GamePlayer getOwner(){
+		return owner;
+	}
+	
 	public void setOwner(GamePlayer p){
 		owner = p;
 		m.setOwner(p.getModel());
@@ -69,14 +71,8 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 		super.paintComponent(g);
 		if(owner != null){
 			g.setColor(owner.getColor());
-			//g.fillRect(rectLoc.x-5, rectLoc.y-5, 10, 10);
-			Dimension d = this.getSize();
 			((Graphics2D)g).setStroke(new BasicStroke(2));
-			g.drawRect(d.width/20, d.height/20, d.width*18/20, d.height*18/20);
-		}
-		else{
-			//g.setColor(new Color(30,30,30));
-			//g.fillRect(rectLoc.x-5, rectLoc.y-5, 10, 10);
+			g.drawRect(rectMark.x, rectMark.y, rectMark.width, rectMark.height);
 		}
 	}
 	

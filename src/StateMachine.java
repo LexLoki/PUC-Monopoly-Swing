@@ -1,5 +1,3 @@
-import org.w3c.dom.css.Rect;
-
 public class StateMachine {
 	
 	private static StateMachine sharedInstance;
@@ -108,12 +106,13 @@ public class StateMachine {
 			}
 		}
 		else{
-			if(p instanceof CompanySpace){
-				gp.buy(((CompanySpace)p).getTax(lastDice));
-			}
-			else{
-				gp.buy(((TerritorySpace)p).getTax());
-			}
+			int value;
+			if(p instanceof CompanySpace)
+				value = ((CompanySpace)p).getTax(lastDice);
+			else
+				value = ((TerritorySpace)p).getTax();
+			gp.buy(value);
+			p.getOwner().earn(value);
 			nextPlayer();
 		}
 	}

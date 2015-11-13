@@ -10,4 +10,11 @@ public class BoardUnit {
 		this.id = id;
 	}
 	
+	public void print(){
+		System.out.println("Name: " + name + "\nId: " + id);
+	}
+	
+	public int getId(){
+		return id;
+	}
 }

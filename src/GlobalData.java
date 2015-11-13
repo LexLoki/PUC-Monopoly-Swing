@@ -33,6 +33,7 @@ public final class GlobalData {
 		return playerColor[i];
 	}
 	
+	//Not being used
 	private static File[] listOfFiles(String path){
 		System.out.println("here");
 		File folder = new File(path);

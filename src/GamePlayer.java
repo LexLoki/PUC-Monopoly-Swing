@@ -1,15 +1,15 @@
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
-
-import Model.PlaceModel;
 import Model.PlayerModel;
 
 public class GamePlayer extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private PlayerModel model;
 	private final Color color;
 	private BoardSpace space;
@@ -52,6 +52,10 @@ public class GamePlayer extends JPanel{
 	
 	public void buy(int value){
 		model.spendMoney(value);
+	}
+	
+	public void earn(int value){
+		model.earnMoney(value);
 	}
 	
 	public int getBalance(){

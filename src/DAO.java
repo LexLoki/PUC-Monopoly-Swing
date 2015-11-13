@@ -1,9 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import Model.PlaceModel;
 import Model.SorteRevesModel;
 import Model.TerritoryModel;
 import Model.CompanyModel;
@@ -16,19 +13,19 @@ public class DAO {
 	private static final String sorteRevesPath = "assets/sorteReves";
 	
 	//NOT WORKING NOW
+	/*
 	static PlaceModel[] getTerritories(){
 		ArrayList<PlaceModel> places = new ArrayList<PlaceModel>();
 		String[] files = DAO.listOfFilesName(territoriesPath);
-		int[] taxes = {20,100,300,750,925,1100};
 		for(int i=0; i<files.length;i++){
 			//places.add(new PlaceModel(files[i], i, "TesteName", 200, 
 			//		50, 50, taxes));
 		}
 		return (PlaceModel[])places.toArray(new PlaceModel[0]);
 	}
+	*/
 	
 	static BoardUnit[] getBoardSpaces(){
-		String path = territoriesPath+"/";
 		BoardUnit[] p = new BoardUnit[]{
 			addN(0),
 			addT("curicica.jpg",1,"Curicica",220,200,200,

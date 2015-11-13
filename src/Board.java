@@ -8,8 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Board extends JPanel {
+public final class Board extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Image bgImg;
 	private final String path = "assets/tabuleiroRJ.jpg";
 	private ArrayList<BoardSpace> boardSpaces = new ArrayList<BoardSpace>();
@@ -37,7 +41,6 @@ public class Board extends JPanel {
 			System.exit(1);
 		}
 		int i;
-		int local = 0;
 		int height = size.width * 136/1000;
 		int width = height * 240 / 350;
 		int dx = width, dy = height;

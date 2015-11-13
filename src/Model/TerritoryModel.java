@@ -19,4 +19,18 @@ public class TerritoryModel extends PlaceModel {
 	public int getTax(){
 		return taxes[numberOfHouses];
 	}
+	
+	public int getNextInvestment(){
+		return numberOfHouses < 4 ? priceOfHouse : numberOfHouses == 4 ? priceOfHotel : -1;
+	}
+	
+	public boolean doInvestment(PlayerModel p){
+		int v = getNextInvestment();
+		if(v != -1 && p.getBalance() >= v){
+			numberOfHouses++;
+			p.spendMoney(v);
+			return true;
+		}
+		return false;
+	}
 }

@@ -1,8 +1,14 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Dice extends JComponent {
+public final class Dice extends JComponent {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	private static final int SPOT_DIAM = 9;  
     
     

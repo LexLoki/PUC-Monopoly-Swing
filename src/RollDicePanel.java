@@ -1,12 +1,13 @@
-import java.awt.Container;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 public class RollDicePanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Dice _leftdice;
 	private Dice _rightdice;
 	private JButton rollButton;

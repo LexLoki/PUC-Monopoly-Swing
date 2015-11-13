@@ -2,7 +2,12 @@
 import java.awt.Dimension;
 import Model.CompanyModel;
 
-public class CompanySpace extends PlaceSpace{
+public final class CompanySpace extends PlaceSpace{
+	
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private CompanyModel model;
 	

@@ -1,4 +1,3 @@
-import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -23,10 +22,6 @@ public class MyFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		prepareBarGraph(new Dimension(mySize.width/2, mySize.height/2));
-	}
-	
-	private void prepareImg(){
-		//JTextField t = JTextField();
 	}
 	
 	private void prepareBarGraph(Dimension size){

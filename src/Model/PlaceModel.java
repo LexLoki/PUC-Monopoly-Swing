@@ -2,6 +2,9 @@ package Model;
 
 public abstract class PlaceModel extends BoardUnit {
 	
+	//Abstract method
+	public abstract int getTax();
+	
 	private final String fileName;
 	private final int buyValue;
 	
@@ -12,6 +15,7 @@ public abstract class PlaceModel extends BoardUnit {
 		this.fileName = fileName;
 		this.buyValue = buyValue;
 	}
+	
 	public final String getFileName(){
 		return fileName;
 	}
@@ -22,8 +26,6 @@ public abstract class PlaceModel extends BoardUnit {
 	public final void setOwner(PlayerModel player){
 		owner = player;
 	}
-	
-	public abstract int getTax();
 	
 	public PlayerModel getOwner(){
 		return owner;
