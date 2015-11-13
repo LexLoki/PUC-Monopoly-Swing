@@ -11,8 +11,8 @@ public final class GlobalData {
 	private static final GlobalData instance = new GlobalData();
 	private Dimension screenSize;
 	private Color[] playerColor;
-	private File[] territoriesFile;
-	private File[] sorteRevesFile;
+	//private File[] territoriesFile;
+	//private File[] sorteRevesFile;
 	
 	private GlobalData(){
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -20,13 +20,17 @@ public final class GlobalData {
 		
 		//would be nice to get this data from a txt file or something
 		//CHECK LATER
-		playerColor = new Color[]{Color.blue, Color.black, Color.red, Color.green, Color.yellow};
-		territoriesFile = GlobalData.listOfFiles("assets/territorios");
-		sorteRevesFile = GlobalData.listOfFiles("assets/sorteReves");
+		playerColor = new Color[]{Color.blue, Color.black, Color.red, Color.green, Color.yellow, Color.orange};
+		//territoriesFile = GlobalData.listOfFiles("assets/territorios");
+		//sorteRevesFile = GlobalData.listOfFiles("assets/sorteReves");
 	}
 	
-	public File[] getSpaceFiles(){
-		return this.territoriesFile;
+	//public File[] getSpaceFiles(){
+	//	return this.territoriesFile;
+	//}
+	
+	Color getPlayerColor(int i){
+		return playerColor[i];
 	}
 	
 	private static File[] listOfFiles(String path){

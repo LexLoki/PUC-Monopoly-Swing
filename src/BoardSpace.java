@@ -1,13 +1,16 @@
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -15,10 +18,8 @@ import javax.swing.JPanel;
 
 import Model.PlaceModel;
 
-public class BoardSpace extends JPanel implements MouseListener {
+public class BoardSpace extends JPanel {
 
-	private Image img;
-	private PlaceModel model;
 	private int local;
 	
 	final static private int LEFT = 0;
@@ -26,16 +27,12 @@ public class BoardSpace extends JPanel implements MouseListener {
 	final static private int RIGHT = 2;
 	final static private int DOWN = 3;
 	
-	public BoardSpace(Dimension d, File file, PlaceModel model, int local){
+	private Point[] places;
+	private ArrayList<GamePlayer> players;
+	
+	public BoardSpace(Dimension d, int local){
 		//Transparency
 		this.local = local;
-		try{
-			img = ImageIO.read(file);
-		}
-		catch(IOException e){
-			System.out.println(e.getMessage());
-			System.exit(1);
-		}
 		if(local == DOWN || local == UP){
 			System.out.println("normal");
 			this.setSize(d);
@@ -44,13 +41,43 @@ public class BoardSpace extends JPanel implements MouseListener {
 			System.out.println("inverted");
 			this.setSize(d.height,d.width);
 		}
-		this.model = model;
-		setBackground(new Color(0,0,0,125));
-		System.out.println(getSize());
+		setBackground(new Color(0,0,0,0));
+		this.setOpaque(false);
+		
+		float vx = (float)d.width/3;
+		float vy = d.height*0.25f;
+		int nLin = 2, nCol = 3;
+		float px, py = vy*0.5f;
+		this.places = new Point[6];
+		for(int i=0; i<nLin; i++, py+=vy){
+			px = vx*0.5f;
+			for(int j=0; j<nCol; j++, px+=vx)
+				places[i*nCol+j] = new Point((int)px,(int)py);
+		}
+		players = new ArrayList<GamePlayer>();
+		
 	}
 	
+	public void setPlayer(GamePlayer p){
+		if(!players.contains(p)){
+			players.add(p);
+		}
+	}
+	
+	public void removePlayer(GamePlayer p){
+		players.remove(p);
+	}
+
 	public void paintComponent(Graphics g){
+
 		super.paintComponent(g);
+		int r = 5;
+		for (GamePlayer player : players){
+			g.setColor(player.getColor());
+			Point p = places[player.getId()];
+			g.fillOval(p.x-r, p.y-r, r*2, r*2);
+		}
+		
 //		Graphics2D g2d = (Graphics2D)g;
 //	     AffineTransform origXform = g2d.getTransform();
 //	     AffineTransform newXform = (AffineTransform)(origXform.clone());
@@ -65,29 +92,4 @@ public class BoardSpace extends JPanel implements MouseListener {
 //	     g2d.drawImage(img, x, y, this);
 //	     g2d.setTransform(origXform);
 	}
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		System.out.println("you entered me");
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		System.out.println("you exited me");
-		// TODO Auto-generated method stub
-	}
-	
-	
 }

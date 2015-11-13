@@ -6,30 +6,50 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class RollDicePanel extends JPanel {
-	private Die _leftdie;
-	private Die _rightdie;
 	
-	RollDicePanel () {
-		_leftdie = new Die();
-		_rightdie = new Die();
+	private Dice _leftdice;
+	private Dice _rightdice;
+	private JButton rollButton;
+	
+	public RollDicePanel (Dimension size) {
 		
-		JButton rollButton = new JButton("New Button");
+		int ax = size.width/2;
+		int ay = size.height*3/4;
+		int a = ax < ay ? ax : ay;
+		Dimension diceD = new Dimension(a,a);
+		_leftdice = new Dice(diceD);
+		_leftdice.setLocation((ax-a)/2, (ay-a)/2);
+		_rightdice = new Dice(diceD);
+		_rightdice.setLocation(ax+_leftdice.getLocation().x, _leftdice.getLocation().y);
+		
+		rollButton = new JButton("Roll");
 		rollButton.setFont(new Font("Sansserif", Font.PLAIN, 24));
+		rollButton.setBounds(0, ay, size.width, size.height-ay);
 		
 		rollButton.addActionListener(new RollListener());
 		
 		this.setLayout(new BorderLayout(5,5));
 		this.add(rollButton, BorderLayout.NORTH);
-		this.add(_leftdie, BorderLayout.WEST);
-		this.add(_rightdie, BorderLayout.EAST);
+		this.add(_leftdice, BorderLayout.WEST);
+		this.add(_rightdice, BorderLayout.EAST);
+		this.setSize(size);
+		this.setLayout(null);
 		
-		this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		//this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+	}
+	
+	public void activate(){
+		rollButton.setVisible(true);
+	}
+	public void desactivate(){
+		rollButton.setVisible(false);
 	}
 
 	private class RollListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            _leftdie.roll();
-            _rightdie.roll();
+            int v1 = _leftdice.roll();
+            int v2 = _rightdice.roll();
+            StateMachine.diceRolled(v1+v2);
         }
     }
 }

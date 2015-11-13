@@ -1,19 +1,17 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Die extends JComponent {
+public class Dice extends JComponent {
 	
 	private static final int SPOT_DIAM = 9;  
     
     
     private int _faceValue;    
     
-   
-    
-    public Die() {
-       
-        setPreferredSize(new Dimension(60,60));
-        roll();  
+    public Dice(Dimension size) {
+    	this.setSize(size);
+        //setPreferredSize(size);//new Dimension(60,60));
+        roll();
     }
     
    
