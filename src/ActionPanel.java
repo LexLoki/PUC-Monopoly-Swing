@@ -18,6 +18,7 @@ public final class ActionPanel extends JPanel {
 	static final String buyText = "Buy";
 	static final String payText = "Pay";
 	static final String passText = "Pass";
+	static final String okText = "Ok";
 	
 	//private BoardSpace actualBoardSpace;
 	private JButton buyButton;
@@ -60,6 +61,10 @@ public final class ActionPanel extends JPanel {
 			else{
 				buyButton.setText(payText);
 			}
+			buyButton.setVisible(true);
+		}
+		else if(b instanceof SorteRevesSpace){
+			buyButton.setText(okText);
 			buyButton.setVisible(true);
 		}
 	}
