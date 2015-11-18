@@ -29,6 +29,9 @@ public class SpaceVisualizer extends JPanel {
 				Dimension d = getSize();
 				g.drawImage(((PlaceSpace)actualBoardSpace).getImage(), 0, 0, d.width, d.height, null);
 			}
+			else if(actualBoardSpace instanceof SorteRevesSpace){
+				
+			}
 		}
 	}
 }

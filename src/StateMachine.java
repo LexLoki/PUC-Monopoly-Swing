@@ -1,3 +1,5 @@
+import Model.SorteRevesModel;
+
 public class StateMachine {
 	
 	private static StateMachine sharedInstance;
@@ -15,6 +17,7 @@ public class StateMachine {
 	private SpaceVisualizer spaceVisualizer;
 	private ActionPanel actionPanel;
 	private States stateToGo;
+	private SorteRevesModel SRm;
 	
 	static void startGame(int nPlayers, Board gameBoard, SpaceVisualizer space, ActionPanel ap){
 		sharedInstance = new StateMachine(nPlayers, gameBoard, space, ap);
@@ -73,10 +76,20 @@ public class StateMachine {
 				if(ps.canBuy() && !gp.canBuy(ps)){
 					nextPlayer();
 				}
+				else if(ps.getOwner() == gp){
+					nextPlayer();
+				}
 				else{
 					spaceVisualizer.setBoardSpace(b);
 					actionPanel.activate(b);
 				}
+			}
+			else if (b instanceof SorteRevesSpace){
+				//SORTE OU REVES FAZER TRETA
+				SRm = ((SorteRevesSpace)b).startSorteReves();
+				// ENVIA IMAGEM DO SRm para o visualizer e chama actionPanel
+				//CHAMAR VISUALIZER
+				actionPanel.activate(b);
 			}
 			else{
 				nextPlayer();
@@ -98,6 +111,8 @@ public class StateMachine {
 	}
 	
 	public void handleBuySpace(PlaceSpace p){
+		if(p != null){
+			
 		GamePlayer gp = gameBoard.getPlayer(playerIndex);
 		if(p.canBuy()){
 			if(gp.canBuy(p)){
@@ -114,6 +129,13 @@ public class StateMachine {
 			gp.buy(value);
 			p.getOwner().earn(value);
 			nextPlayer();
+		}
+		}
+		
+		else{
+			//OK BUTTON DO SORTE REVES
+			//EXECUTAR ACAO DO SRM
+			//gameBoard.doMovement(playerIndex, value);
 		}
 	}
 	
