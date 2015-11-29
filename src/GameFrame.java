@@ -1,4 +1,12 @@
 import javax.swing.*;
+
+import Board.Board;
+import Controller.GlobalData;
+import Controller.StateMachine;
+import InterfacePanels.ActionPanel;
+import InterfacePanels.PlayersInfoPanel;
+import InterfacePanels.SpaceVisualizer;
+
 import java.awt.*;
 
 public final class GameFrame extends JFrame {
@@ -7,10 +15,11 @@ public final class GameFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Board gameBoard;
-	private SpaceVisualizer spaceVisualizer;
-	private Dimension insideSize;
-	private ActionPanel actionPanel;
+	private final Board gameBoard;
+	private final SpaceVisualizer spaceVisualizer;
+	private final Dimension insideSize;
+	private final ActionPanel actionPanel;
+	private final PlayersInfoPanel pInfoPanel;
 	
 	
 	public GameFrame(int nPlayers){
@@ -38,8 +47,13 @@ public final class GameFrame extends JFrame {
 		actionPanel = new ActionPanel(vA);
 		GameFrame.setPositionBottomLeft(actionPanel, d+vD.width, size.height);
 		getContentPane().add(actionPanel);
+		//(0.35x, 0.46875x)
+		Dimension vP = new Dimension((int)(0.35*size.width),(int)(0.46875*size.width));
+		pInfoPanel = new PlayersInfoPanel(vP, nPlayers);
+		GameFrame.setPositionUpperRight(pInfoPanel, size.width, 0);
+		getContentPane().add(pInfoPanel);
 		
-		StateMachine.startGame(nPlayers, gameBoard, spaceVisualizer, actionPanel);
+		StateMachine.startGame(nPlayers, gameBoard, spaceVisualizer, actionPanel, pInfoPanel);
 		
 		repaint();
 		this.setLayout(null);
@@ -48,7 +62,9 @@ public final class GameFrame extends JFrame {
 	static private void setPositionCenter(JPanel p, int x, int y){
 		setPositionAnchor(p, 0.5, 0.5, x, y);
 	}
-	
+	static private void setPositionUpperRight(JPanel p, int x, int y){
+		setPositionAnchor(p, 1., 0., x, y);
+	}
 	static private void setPositionBottomLeft(JPanel p, int x, int y){
 		setPositionAnchor(p, 0., 1., x, y);
 	}

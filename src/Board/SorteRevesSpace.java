@@ -1,3 +1,4 @@
+package Board;
 
 import java.awt.Dimension;
 import Model.SorteRevesModel;
@@ -15,18 +16,18 @@ public class SorteRevesSpace extends BoardSpace {
 	
 	public SorteRevesSpace(Dimension d, SorteRevesModel model, int local){
 		super(d, local);
-		this.model = model;
+		//this.model = model;
 	}
 	
-	public SorteRevesModel startSorteReves(){
-		SorteRevesSpace.handle();
-	}
-	
-	private static SorteRevesModel handle(){
-		
-		//GET TOP CARD FROM SORTEREVESMODEL
-		
-		return SorteRevesModel(0);
-	}
+//	public SorteRevesModel startSorteReves(){
+//		SorteRevesSpace.handle();
+//	}
+//	
+//	private static SorteRevesModel handle(){
+//		
+//		//GET TOP CARD FROM SORTEREVESMODEL
+//		
+//		return SorteRevesModel(0);
+//	}
 	
 }

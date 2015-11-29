@@ -1,6 +1,10 @@
+package Board;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import Controller.DAO;
+import Controller.GlobalData;
+import Controller.StateMachine;
 import Model.*;
 
 import java.awt.*;
@@ -96,20 +100,20 @@ public final class Board extends JPanel {
 		GlobalData inst = GlobalData.getInstance();
 		BoardSpace first = boardSpaces.get(0);
 		for(i=0; i<nPlayers; i++){
-			GamePlayer p = new GamePlayer(new PlayerModel(i,10000),inst.getPlayerColor(i));
+			GamePlayer p = new GamePlayer(new PlayerModel(i,2458),inst.getPlayerColor(i));
 			p.setSpace(first);
 			first.setPlayer(p);
 			players.add(p);
 		}
 		
-
-		dice = new RollDicePanel(new Dimension(size.width*3/9, size.width*2/9));
-		dice.setLocation(sqD.width+2, sqD.height+2);
+		Dimension diceD = new Dimension(size.width*3/9, size.width*2/9);
+		dice = new RollDicePanel(diceD);
+		dice.setLocation(size.width-sqD.width-diceD.width-2, size.height-sqD.height-diceD.height-2);
 		this.add(dice);
 		this.setLayout(null);
 	}
 	
-	void doMovement(int playerIndex, int value){
+	public void doMovement(int playerIndex, int value){
 		GamePlayer player = players.get(playerIndex);
 		BoardSpace currentSpace = player.getSpace();
 		int index = boardSpaces.indexOf(currentSpace);
@@ -123,7 +127,7 @@ public final class Board extends JPanel {
 		StateMachine.endAction();
 	}
 	
-	void showPlayersBalance(){
+	public void showPlayersBalance(){
 		for (GamePlayer p:players){
 			
 			System.out.println(p.getId() + ": " + p.getBalance());
@@ -140,6 +144,10 @@ public final class Board extends JPanel {
 				return p;
 		}
 		return null;
+	}
+	
+	public GamePlayer[] getPlayers(){
+		return (GamePlayer[])players.toArray(new GamePlayer[0]);
 	}
 	
 	private BoardSpace prepareFromModel(Dimension d, BoardUnit model, int local){

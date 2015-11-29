@@ -1,3 +1,4 @@
+package Board;
 
 import java.awt.Dimension;
 

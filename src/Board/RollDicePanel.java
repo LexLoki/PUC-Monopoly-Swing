@@ -1,6 +1,9 @@
+package Board;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import Controller.StateMachine;
 
 public class RollDicePanel extends JPanel {
 	

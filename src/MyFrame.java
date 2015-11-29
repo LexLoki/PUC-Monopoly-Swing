@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 
 import javax.swing.*;
 
+import Controller.GlobalData;
+
 
 public class MyFrame extends JFrame {
 	

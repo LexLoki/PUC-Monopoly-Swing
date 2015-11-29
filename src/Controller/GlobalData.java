@@ -1,3 +1,4 @@
+package Controller;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public final class GlobalData {
 	//	return this.territoriesFile;
 	//}
 	
-	Color getPlayerColor(int i){
+	public Color getPlayerColor(int i){
 		return playerColor[i];
 	}
 	

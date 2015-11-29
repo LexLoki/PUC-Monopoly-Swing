@@ -1,3 +1,4 @@
+package InterfacePanels;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,6 +8,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import Board.BoardSpace;
+import Board.PlaceSpace;
+import Board.SorteRevesSpace;
+import Controller.StateMachine;
 
 
 public final class ActionPanel extends JPanel {
@@ -19,6 +25,9 @@ public final class ActionPanel extends JPanel {
 	static final String payText = "Pay";
 	static final String passText = "Pass";
 	static final String okText = "Ok";
+	static final String hipText = "Mortgage";
+	static final String sellText = "Sell";
+	static final String houseText = "House";
 	
 	//private BoardSpace actualBoardSpace;
 	private JButton buyButton;
@@ -56,6 +65,7 @@ public final class ActionPanel extends JPanel {
 			if(ps.canBuy()){
 				buyButton.setText(buyText);
 				actualSpace = ps;
+				passButton.setText(passText);
 				passButton.setVisible(true);
 			}
 			else{
@@ -65,6 +75,15 @@ public final class ActionPanel extends JPanel {
 		}
 		else if(b instanceof SorteRevesSpace){
 			buyButton.setText(okText);
+			buyButton.setVisible(true);
+		}
+	}
+	
+	public void activateManagement(PlaceSpace p, Boolean canBuyHouse){
+		passButton.setText(sellText);
+		passButton.setVisible(true);
+		if(canBuyHouse){
+			buyButton.setText(houseText);
 			buyButton.setVisible(true);
 		}
 	}

@@ -1,3 +1,4 @@
+package Board;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Controller.StateMachine;
 import Model.PlaceModel;
 
 public class PlaceSpace extends BoardSpace implements MouseListener {

@@ -1,8 +1,11 @@
+package Board;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+
 import Model.PlayerModel;
+import Model.TerritoryModel.TerritoryType;
 
 public class GamePlayer extends JPanel{
 	
@@ -43,6 +46,7 @@ public class GamePlayer extends JPanel{
 	
 	public void buy(PlaceSpace ps){
 		model.acquire(ps.getModel());
+		ownedSpaces.add(ps);
 		ps.setOwner(this);
 	}
 	
@@ -60,6 +64,32 @@ public class GamePlayer extends JPanel{
 	
 	public int getBalance(){
 		return model.getBalance();
+	}
+	
+	public Boolean isBroke(){
+		return model.getBalance()<0;
+	}
+	
+	public PlaceSpace[] getOwnedSpaces(){
+		return (PlaceSpace[])ownedSpaces.toArray(new PlaceSpace[0]);
+	}
+	
+	public Boolean canBuyHouseFor(TerritorySpace t){
+		int hq = t.getHouseQuant();
+		if(hq>4) return false;
+		int quant=0;
+		int less = 10;
+		TerritoryType typ = t.getType();
+		for(PlaceSpace ps:ownedSpaces)
+			if(ps instanceof TerritorySpace){
+				TerritorySpace tt = (TerritorySpace)ps;
+				if(tt.getType()==typ){
+					quant++;
+					int h = tt.getHouseQuant();
+					if(h<less) less = h;
+				}
+			}
+		return quant==3 && hq==less;
 	}
 	
 	public void paintComponent(Graphics g){
