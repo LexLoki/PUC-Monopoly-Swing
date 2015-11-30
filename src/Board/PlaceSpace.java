@@ -65,8 +65,15 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 	
 	public void setOwner(GamePlayer p){
 		owner = p;
-		m.setOwner(p.getModel());
+		if(p != null)
+			m.setOwner(p.getModel());
+		else
+			m.setOwner(null);
 		this.repaint();
+	}
+	
+	public int getTax(){
+		return 100000;
 	}
 	
 	public void paintComponent(Graphics g){

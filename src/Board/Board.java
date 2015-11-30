@@ -29,9 +29,12 @@ public final class Board extends JPanel {
 	
 	final private int nSpaces = 36;
 	
+	final private BoardSpace prisonSpace;
+	
 	private RollDicePanel dice;
 	
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
+	private ArrayList<PlaceSpace> hips = new ArrayList<PlaceSpace>();
 	
 	public Board(Dimension size, int nPlayers){
 		super();
@@ -68,6 +71,7 @@ public final class Board extends JPanel {
 		space.setLocation(0, 0);
 		this.add(space);
 		boardSpaces.add(space);
+		this.prisonSpace = space;
 		//1
 		for(i=0; i<8; i++){
 			space = prepareFromModel(d,fs[i+10],1);
@@ -86,7 +90,8 @@ public final class Board extends JPanel {
 			this.add(space);
 			boardSpaces.add(space);
 		}
-		space = new BoardSpace(sqD, 3);
+		space = prepareFromModel(sqD, fs[27], 2);
+//		space = new BoardSpace(sqD, 3);
 		space.setLocation(size.width-dy, size.height-dy);
 		this.add(space);
 		boardSpaces.add(space);
@@ -111,6 +116,7 @@ public final class Board extends JPanel {
 		dice.setLocation(size.width-sqD.width-diceD.width-2, size.height-sqD.height-diceD.height-2);
 		this.add(dice);
 		this.setLayout(null);
+		
 	}
 	
 	public void doMovement(int playerIndex, int value){
@@ -120,11 +126,19 @@ public final class Board extends JPanel {
 		index = (index+value)%nSpaces;
 		currentSpace.removePlayer(player);
 		BoardSpace newSpace = boardSpaces.get(index);
+		goTo(player, newSpace);
+	}
+	private void goTo(GamePlayer player, BoardSpace newSpace){
+		BoardSpace currentSpace = player.getSpace();
 		newSpace.setPlayer(player);
 		player.setSpace(newSpace);
 		newSpace.repaint();
 		currentSpace.repaint();
 		StateMachine.endAction();
+	}
+	//prison
+	public void goToPrison(int playerIndex){
+		goTo(getPlayer(playerIndex), this.prisonSpace);
 	}
 	
 	public void showPlayersBalance(){

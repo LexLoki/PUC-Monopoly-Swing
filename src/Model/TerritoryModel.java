@@ -28,6 +28,15 @@ public class TerritoryModel extends PlaceModel {
 		return taxes[numberOfHouses];
 	}
 	
+	public int putHouse(){
+		return(++numberOfHouses);
+	}
+	
+	public int sellHouse(){
+		numberOfHouses--;
+		return getNextInvestment()/2;
+	}
+	
 	public int getNextInvestment(){
 		return numberOfHouses < 4 ? priceOfHouse : numberOfHouses == 4 ? priceOfHotel : -1;
 	}

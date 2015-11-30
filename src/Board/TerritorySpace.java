@@ -25,7 +25,19 @@ public class TerritorySpace extends PlaceSpace{
 		return model.getHousesQuant();
 	}
 	
+	public boolean putHouse(){
+		return model.putHouse()<5;
+	}
+	
 	public int getTax(){
 		return model.getTax();
+	}
+	
+	public int getNextInvestment(){
+		return model.getNextInvestment();
+	}
+	
+	public int sellHouse(){
+		return model.sellHouse();
 	}
 }

@@ -84,7 +84,7 @@ public class DAO {
 			addT("riodaspedras.jpg",26,"Rio das pedras",260,150,150,
 					new int[]{22,110,330,800,975,1150},
 					TerritoryType.red),
-			addN(27),
+			addE(27, "Para prisao", 0),
 			addT("fuba.jpg",28,"Fuba",160,100,100,
 					new int[]{12,60,180,500,700,900},
 					TerritoryType.purple),

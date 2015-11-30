@@ -53,7 +53,7 @@ public class RollDicePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int v1 = _leftdice.roll();
             int v2 = _rightdice.roll();
-            StateMachine.diceRolled(v1+v2);
+            StateMachine.diceRolled(v1,v2);
         }
     }
 }

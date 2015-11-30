@@ -17,7 +17,7 @@ public final class EffectSpace extends BoardSpace{
 		this.model = model;
 	}
 	
-	public int getTax(){
+	public int getValue(){
 		return model.getValue();
 	}
 }

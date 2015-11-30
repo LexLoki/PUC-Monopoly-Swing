@@ -2,8 +2,10 @@ package Controller;
 import Board.Board;
 import Board.BoardSpace;
 import Board.CompanySpace;
+import Board.EffectSpace;
 import Board.GamePlayer;
 import Board.PlaceSpace;
+import Board.SorteRevesSpace;
 import Board.TerritorySpace;
 import InterfacePanels.ActionPanel;
 import InterfacePanels.PlayersInfoPanel;
@@ -43,8 +45,8 @@ public class StateMachine {
 		playerPanel = pp;
 	}
 	
-	static public void diceRolled(int value){
-		sharedInstance.handleDiceRoll(value);
+	static public void diceRolled(int value1, int value2){
+		sharedInstance.handleDiceRoll(value1, value2);
 	}
 	static public void endAction(){
 		sharedInstance.handleEndAction();
@@ -52,8 +54,8 @@ public class StateMachine {
 	static public void buySpace(PlaceSpace p){
 		sharedInstance.handleBuySpace(p);
 	}
-	static public void passSpace(){
-		sharedInstance.handlePassSpace();
+	static public void passSpace(PlaceSpace space){
+		sharedInstance.handlePassSpace(space);
 	}
 	static public void mouseOver(BoardSpace b){
 		sharedInstance.handleMouseOver(b);
@@ -68,8 +70,29 @@ public class StateMachine {
 		return sharedInstance.gameBoard.getPlayers();
 	}
 	
-	private void handlePassSpace(){
-		nextPlayer();
+	//Handle Pass turn and sell action
+	private void handlePassSpace(PlaceSpace space){
+		if(space.getOwner()!=null){
+			GamePlayer p = gameBoard.getPlayer(playerIndex);
+			if(space instanceof TerritorySpace){
+				TerritorySpace t = (TerritorySpace)space;
+				if(t.getHouseQuant()>0){
+					p.earn(t.sellHouse());
+					spaceVisualizer.repaint();
+				}
+				else{
+					p.sell(space);
+					actionPanel.desactivate();
+				}
+			}
+			else{
+				p.sell(space);
+				actionPanel.desactivate();
+			}
+		}
+		else
+			nextPlayer();
+		playerPanel.updatePlayer(playerIndex);
 	}
 	
 	private void handleMouseOver(BoardSpace b){
@@ -104,16 +127,18 @@ public class StateMachine {
 	private void transitionToState(States s){
 		actualState = s;
 		if(s == States.Action){
+			actionPanel.desactivate();
 			gameBoard.desactivateDice();
 			BoardSpace b = gameBoard.getPlayerSpace(playerIndex);
 			System.out.println(b.getName());
 			if (b instanceof PlaceSpace){
 				PlaceSpace ps = (PlaceSpace)b;
 				GamePlayer gp = gameBoard.getPlayer(playerIndex);
+				GamePlayer owner = ps.getOwner();
 				if(ps.canBuy() && !gp.canBuy(ps)){
 					nextPlayer();
 				}
-				else if(ps.getOwner() == gp){
+				else if(owner == gp){
 					nextPlayer();
 				}
 				else{
@@ -121,13 +146,23 @@ public class StateMachine {
 					actionPanel.activate(b);
 				}
 			}
-//			else if (b instanceof SorteRevesSpace){
-//				//SORTE OU REVES FAZER TRETA
-//				SRm = ((SorteRevesSpace)b).startSorteReves();
-//				// ENVIA IMAGEM DO SRm para o visualizer e chama actionPanel
-//				//CHAMAR VISUALIZER
-//				actionPanel.activate(b);
-//			}
+			else if (b instanceof SorteRevesSpace){
+				//SORTE OU REVES FAZER TRETA
+				//SRm = ((SorteRevesSpace)b).startSorteReves();
+				// ENVIA IMAGEM DO SRm para o visualizer e chama actionPanel
+				//CHAMAR VISUALIZER
+				//actionPanel.activate(b);
+			}
+			else if(b instanceof EffectSpace){
+				//do a confirmation phase
+				int value = ((EffectSpace)b).getValue();
+				if(value==0){
+					gameBoard.goToPrison(playerIndex);
+				}else{
+					
+				}
+				nextPlayer();
+			}
 			else{
 				nextPlayer();
 			}
@@ -137,13 +172,21 @@ public class StateMachine {
 		}
 	}
 	
-	private void handleDiceRoll(int value){
+	private void handleDiceRoll(int v1, int v2){
 		if(!isBusy)
 			if(actualState == States.DiceRoll){
+				int value = v1+v2;
 				lastDice = value;
-				isBusy = true;
-				stateToGo = States.Action;
-				gameBoard.doMovement(playerIndex,value);
+				GamePlayer gp = gameBoard.getPlayer(playerIndex);
+				if(gp.isOnPrison())
+					gp.prisonDice(v1, v2);
+				if(gp.isOnPrison())
+					nextPlayer();
+				else{
+					isBusy = true;
+					stateToGo = States.Action;
+					gameBoard.doMovement(playerIndex,value);
+				}
 			}
 	}
 	
@@ -153,25 +196,30 @@ public class StateMachine {
 	
 	public void handleBuySpace(PlaceSpace p){
 		if(p != null){
-			
-		GamePlayer gp = gameBoard.getPlayer(playerIndex);
-		if(p.canBuy()){
-			if(gp.canBuy(p)){
-				gp.buy(p);
-				updatePlayerPanel(playerIndex);
+			GamePlayer gp = gameBoard.getPlayer(playerIndex);
+			//BUYING HOUSE FOR PROPERTY
+			GamePlayer owner = p.getOwner();
+			if(owner!=null && owner == gp){
+				TerritorySpace t = (TerritorySpace)p;
+				spaceVisualizer.repaint();
+				t.putHouse();
+				gp.buy(t.getNextInvestment());
+				if(!gp.canBuyHouseFor(t))
+					actionPanel.desactivateBuy();
+			}
+			//BUYING PROPERTY
+			else if(p.canBuy()){
+				if(gp.canBuy(p)){
+					gp.buy(p);
+					updatePlayerPanel(playerIndex);
+					nextPlayer();
+				}
+			}
+			//PAYING TAX FOR PROPERTY
+			else{
+				payment(gp,p);
 				nextPlayer();
 			}
-		}
-		else{
-			int value;
-			if(p instanceof CompanySpace)
-				value = ((CompanySpace)p).getTax(lastDice);
-			else
-				value = ((TerritorySpace)p).getTax();
-			gp.buy(value);
-			p.getOwner().earn(value);
-			nextPlayer();
-		}
 		}
 		
 		else{
@@ -179,6 +227,20 @@ public class StateMachine {
 			//EXECUTAR ACAO DO SRM
 			//gameBoard.doMovement(playerIndex, value);
 		}
+	}
+	
+	private void payment(GamePlayer gp, PlaceSpace p){
+		int value;
+		if(p instanceof CompanySpace)
+			value = ((CompanySpace)p).getTax(lastDice);
+		else
+			value = ((TerritorySpace)p).getTax();
+		gp.buy(value);
+		if(gp.getBalance()<0){
+			gp.sellEverything();
+			value += gp.getBalance();
+		}
+		p.getOwner().earn(value);
 	}
 	
 	public int getPlayerIndex(){

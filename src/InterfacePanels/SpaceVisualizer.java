@@ -1,4 +1,5 @@
 package InterfacePanels;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.geom.Path2D;
 import javax.swing.JPanel;
 
 import Board.BoardSpace;
+import Board.GamePlayer;
 import Board.PlaceSpace;
 import Board.SorteRevesSpace;
 import Board.TerritorySpace;
@@ -41,10 +43,16 @@ public class SpaceVisualizer extends JPanel {
 				g.drawImage((bSpace).getImage(), 0, 0, d.width, d.height, null);
 				if(bSpace instanceof TerritorySpace){
 					TerritorySpace tSpace = (TerritorySpace)bSpace;
-					int ss = d.width/5;
+					int ss = d.width/6;
 					int quant = tSpace.getHouseQuant();
 					for(int i=0;i<quant;i++)
 						this.drawHouse(g, i*(ss+2), 0, ss, ss);
+				}
+				GamePlayer pp = bSpace.getOwner();
+				if(pp!=null){
+					g.setColor(pp.getColor());
+					((Graphics2D)g).setStroke(new BasicStroke(3));
+					g.drawRect(0, 0, d.width, d.height);
 				}
 			}
 			else if(actualBoardSpace instanceof SorteRevesSpace){

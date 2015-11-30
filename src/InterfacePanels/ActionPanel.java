@@ -62,9 +62,9 @@ public final class ActionPanel extends JPanel {
 	public void activate(BoardSpace b){
 		if(b instanceof PlaceSpace){
 			PlaceSpace ps = (PlaceSpace)b;
+			actualSpace = ps;
 			if(ps.canBuy()){
 				buyButton.setText(buyText);
-				actualSpace = ps;
 				passButton.setText(passText);
 				passButton.setVisible(true);
 			}
@@ -82,10 +82,15 @@ public final class ActionPanel extends JPanel {
 	public void activateManagement(PlaceSpace p, Boolean canBuyHouse){
 		passButton.setText(sellText);
 		passButton.setVisible(true);
+		actualSpace = p;
 		if(canBuyHouse){
 			buyButton.setText(houseText);
 			buyButton.setVisible(true);
 		}
+	}
+	
+	public void desactivateBuy(){
+		buyButton.setVisible(false);
 	}
 	
 	public void desactivate(){
@@ -111,7 +116,7 @@ public final class ActionPanel extends JPanel {
     }
 	private class PassListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            StateMachine.passSpace();
+            StateMachine.passSpace(actualSpace);
         }
     }
 }

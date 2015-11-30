@@ -15,7 +15,15 @@ public class PlayerModel {
 		this.id = id;
 		this.balance = balance;
 	}
-	
+	public void goToPrison(){
+		isOnJail = true;
+	}
+	public void leavePrison(){
+		isOnJail = false;
+	}
+	public boolean isOnPrison(){
+		return isOnJail;
+	}
 	public int getId(){
 		return id;
 	}

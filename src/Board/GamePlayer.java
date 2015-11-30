@@ -17,7 +17,7 @@ public class GamePlayer extends JPanel{
 	private final Color color;
 	private BoardSpace space;
 	private ArrayList<PlaceSpace> ownedSpaces = new ArrayList<PlaceSpace>();
-	
+	private int prisonTurns = 0;
 	
 	public GamePlayer(PlayerModel model, Color c){
 		this.model = model;
@@ -44,10 +44,39 @@ public class GamePlayer extends JPanel{
 		return model.canAcquire(ps.getValue());
 	}
 	
+	public boolean canBuy(int value){
+		return model.canAcquire(value);
+	}
+	
+	public void goToPrison(){
+		prisonTurns = 0;
+		model.goToPrison();
+	}
+	public void prisonDice(int v1, int v2){
+		if(v1==v2)
+			leavePrison();
+		else if((++prisonTurns)==4){
+			this.buy(50);
+			leavePrison();
+		}
+	}
+	public boolean isOnPrison(){
+		return model.isOnPrison();
+	}
+	public void leavePrison(){
+		model.leavePrison();
+	}
+	
 	public void buy(PlaceSpace ps){
 		model.acquire(ps.getModel());
 		ownedSpaces.add(ps);
 		ps.setOwner(this);
+	}
+	
+	public void sell(PlaceSpace ps){
+		ownedSpaces.remove(ps);
+		ps.setOwner(null);
+		this.earn(ps.getValue());
 	}
 	
 	public PlayerModel getModel(){
@@ -70,13 +99,20 @@ public class GamePlayer extends JPanel{
 		return model.getBalance()<0;
 	}
 	
+	public void sellEverything(){
+		while(!ownedSpaces.isEmpty()){
+			PlaceSpace ps = ownedSpaces.remove(0);
+			ps.setOwner(null);
+		}
+	}
+	
 	public PlaceSpace[] getOwnedSpaces(){
 		return (PlaceSpace[])ownedSpaces.toArray(new PlaceSpace[0]);
 	}
 	
 	public Boolean canBuyHouseFor(TerritorySpace t){
 		int hq = t.getHouseQuant();
-		if(hq>4) return false;
+		if(hq>4 || getBalance()<t.getTax()) return false;
 		int quant=0;
 		int less = 10;
 		TerritoryType typ = t.getType();
