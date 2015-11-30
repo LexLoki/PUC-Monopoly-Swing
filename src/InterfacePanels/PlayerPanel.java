@@ -15,7 +15,7 @@ import Board.GamePlayer;
 import Board.PlaceSpace;
 import Controller.StateMachine;
 
-public class PlayerPanel extends JPanel implements MouseListener {
+class PlayerPanel extends JPanel implements MouseListener {
 
 	/**
 	 * 

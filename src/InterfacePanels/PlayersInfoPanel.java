@@ -33,7 +33,7 @@ public class PlayersInfoPanel extends JPanel {
 		this.add(label);
 		
 		Dimension playersSize = new Dimension(d.width, d.height - labelSize.height);
-		Dimension pSize = new Dimension(playersSize.width, playersSize.height/nPlayers);
+		Dimension pSize = new Dimension(playersSize.width, playersSize.height/Math.max(nPlayers,4));
 		ArrayList<PlayerPanel> pp = new ArrayList<PlayerPanel>();
 		for(int i=0; i<nPlayers; i++){
 			PlayerPanel p = new PlayerPanel(pSize,i);

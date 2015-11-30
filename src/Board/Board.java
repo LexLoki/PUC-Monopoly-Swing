@@ -123,10 +123,14 @@ public final class Board extends JPanel {
 		GamePlayer player = players.get(playerIndex);
 		BoardSpace currentSpace = player.getSpace();
 		int index = boardSpaces.indexOf(currentSpace);
-		index = (index+value)%nSpaces;
+		int ind = index+value;
+		if(ind>=36)
+			player.earn(200);
+		index = ind%nSpaces;
 		currentSpace.removePlayer(player);
 		BoardSpace newSpace = boardSpaces.get(index);
 		goTo(player, newSpace);
+		StateMachine.endAction();
 	}
 	private void goTo(GamePlayer player, BoardSpace newSpace){
 		BoardSpace currentSpace = player.getSpace();
@@ -134,7 +138,6 @@ public final class Board extends JPanel {
 		player.setSpace(newSpace);
 		newSpace.repaint();
 		currentSpace.repaint();
-		StateMachine.endAction();
 	}
 	//prison
 	public void goToPrison(int playerIndex){

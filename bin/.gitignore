@@ -4,3 +4,10 @@
 /Controller/
 /InterfacePanels/
 /Model/
+/MainMenu.class
+/ResizeUtils.class
+/MainMenuPanel.class
+/GameFrame$StartListener.class
+/GameFrame$GameListener.class
+/MainMenu$GameListener.class
+/MainMenuSelector.class

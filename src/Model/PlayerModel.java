@@ -1,8 +1,9 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class PlayerModel {
+public class PlayerModel extends Observable{
 	
 	private int id;
 	private int balance;
@@ -33,11 +34,15 @@ public class PlayerModel {
 	}
 	
 	public void spendMoney(int value){
-		balance -= value;
+		changeBalance(-value);
 	}
-	
 	public void earnMoney(int value){
+		changeBalance(value);
+	}
+	private void changeBalance(int value){
 		balance += value;
+		this.setChanged();
+		this.notifyObservers();
 	}
 	public boolean canAcquire(int value){
 		return balance >= value;

@@ -10,6 +10,7 @@ import Board.TerritorySpace;
 import InterfacePanels.ActionPanel;
 import InterfacePanels.PlayersInfoPanel;
 import InterfacePanels.SpaceVisualizer;
+import InterfacePanels.StatusPanel;
 import Model.SorteRevesModel;
 
 public class StateMachine {
@@ -31,18 +32,20 @@ public class StateMachine {
 	private PlayersInfoPanel playerPanel;
 	private States stateToGo;
 	private SorteRevesModel SRm;
+	private StatusPanel statusPanel;
 	
-	public static void startGame(int nPlayers, Board gameBoard, SpaceVisualizer space, ActionPanel ap, PlayersInfoPanel pp){
-		sharedInstance = new StateMachine(nPlayers, gameBoard, space, ap, pp);
+	public static void startGame(int nPlayers, Board gameBoard, SpaceVisualizer space, ActionPanel ap, PlayersInfoPanel pp, StatusPanel sp){
+		sharedInstance = new StateMachine(nPlayers, gameBoard, space, ap, pp, sp);
 	}
 	
-	private StateMachine(int nPlayers, Board gameBoard, SpaceVisualizer space, ActionPanel ap, PlayersInfoPanel pp){
+	private StateMachine(int nPlayers, Board gameBoard, SpaceVisualizer space, ActionPanel ap, PlayersInfoPanel pp, StatusPanel sp){
 		this.nPlayers = nPlayers;
 		this.actualState = States.DiceRoll;
 		this.gameBoard = gameBoard;
 		spaceVisualizer = space;
 		actionPanel = ap;
 		playerPanel = pp;
+		statusPanel = sp;
 	}
 	
 	static public void diceRolled(int value1, int value2){
@@ -146,23 +149,24 @@ public class StateMachine {
 					actionPanel.activate(b);
 				}
 			}
-			else if (b instanceof SorteRevesSpace){
-				//SORTE OU REVES FAZER TRETA
-				//SRm = ((SorteRevesSpace)b).startSorteReves();
-				// ENVIA IMAGEM DO SRm para o visualizer e chama actionPanel
-				//CHAMAR VISUALIZER
-				//actionPanel.activate(b);
-			}
+			
 			else if(b instanceof EffectSpace){
 				//do a confirmation phase
 				int value = ((EffectSpace)b).getValue();
 				if(value==0){
 					gameBoard.goToPrison(playerIndex);
 				}else{
-					
+					gameBoard.getPlayer(playerIndex).earn(value);
 				}
 				nextPlayer();
 			}
+			//else if (b instanceof SorteRevesSpace){
+				//SORTE OU REVES FAZER TRETA
+				//SRm = ((SorteRevesSpace)b).startSorteReves();
+				// ENVIA IMAGEM DO SRm para o visualizer e chama actionPanel
+				//CHAMAR VISUALIZER
+				//actionPanel.activate(b);
+			//}
 			else{
 				nextPlayer();
 			}
@@ -253,6 +257,7 @@ public class StateMachine {
 		for(playerIndex = (playerIndex+1)%nPlayers; 
 				gameBoard.getPlayer(playerIndex).isBroke();
 				playerIndex = (playerIndex+1)%nPlayers);
+		statusPanel.setTurn(playerIndex);
 		actionPanel.desactivate();
 		sharedInstance.transitionToState(States.DiceRoll);
 	}

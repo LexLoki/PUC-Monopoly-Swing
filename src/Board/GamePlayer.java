@@ -2,6 +2,8 @@ package Board;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Observer;
+
 import javax.swing.JPanel;
 
 import Model.PlayerModel;
@@ -126,6 +128,10 @@ public class GamePlayer extends JPanel{
 				}
 			}
 		return quant==3 && hq==less;
+	}
+	
+	public void addObserver(Observer o){
+		this.model.addObserver(o);
 	}
 	
 	public void paintComponent(Graphics g){
