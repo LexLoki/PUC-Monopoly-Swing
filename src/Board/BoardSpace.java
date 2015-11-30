@@ -1,9 +1,12 @@
 package Board;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -68,9 +71,13 @@ public class BoardSpace extends JPanel {
 		super.paintComponent(g);
 		int r = 5;
 		for (GamePlayer player : players){
-			g.setColor(player.getColor());
 			Point p = places[player.getId()];
-			g.fillOval(p.x-r, p.y-r, r*2, r*2);
+			g.setColor(Color.black);
+			Rectangle rr = new Rectangle(p.x-r, p.y-r, r*2, r*2);
+			((Graphics2D)g).setStroke(new BasicStroke(2));
+			g.drawOval(rr.x, rr.y, rr.width, rr.height);
+			g.setColor(player.getColor());
+			g.fillOval(rr.x, rr.y, rr.width, rr.height);
 		}
 		
 //		Graphics2D g2d = (Graphics2D)g;
