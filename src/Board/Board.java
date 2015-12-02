@@ -127,13 +127,13 @@ public final class Board extends JPanel {
 		if(ind>=36)
 			player.earn(200);
 		index = ind%nSpaces;
-		currentSpace.removePlayer(player);
 		BoardSpace newSpace = boardSpaces.get(index);
 		goTo(player, newSpace);
 		StateMachine.endAction();
 	}
 	private void goTo(GamePlayer player, BoardSpace newSpace){
 		BoardSpace currentSpace = player.getSpace();
+		currentSpace.removePlayer(player);
 		newSpace.setPlayer(player);
 		player.setSpace(newSpace);
 		newSpace.repaint();
