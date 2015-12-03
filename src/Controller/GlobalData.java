@@ -33,6 +33,15 @@ public final class GlobalData {
 	public Color getPlayerColor(int i){
 		return playerColor[i];
 	}
+	public String getPlayerColorName(int i){
+		Color c = getPlayerColor(i);
+		if(c==Color.blue)return "Blue";
+		if(c==Color.black)return "Black";
+		if(c==Color.red)return "Red";
+		if(c==Color.green)return "Green";
+		if(c==Color.yellow)return "Yellow";
+		return "Orange";
+	}
 	
 	//Not being used
 	private static File[] listOfFiles(String path){

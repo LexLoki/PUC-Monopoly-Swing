@@ -1,26 +1,25 @@
-import java.awt.Dimension;
+package PreGame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
-class MainMenuPanel extends JPanel {
+public class JIButton extends JButton {
 
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final String path = "assets/mainMenu.jpg";
+	private final String path;
 	private Image bgImg;
-	
-	MainMenuPanel(Dimension size){
-		super();
-		setSize(size);
-		setLayout(null);
-		setVisible(true);
+
+	JIButton(String filename){
+		path = filename;
 		try{
 			bgImg = ImageIO.read(new File(path));
 		}
@@ -34,4 +33,5 @@ class MainMenuPanel extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(bgImg, 0, 0, this.getWidth(), this.getHeight(), this);
 	}
+	
 }

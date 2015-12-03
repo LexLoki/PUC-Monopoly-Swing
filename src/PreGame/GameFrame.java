@@ -1,3 +1,5 @@
+package PreGame;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import Board.Board;
@@ -8,6 +10,7 @@ import InterfacePanels.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public final class GameFrame extends JFrame {
 	
@@ -21,10 +24,14 @@ public final class GameFrame extends JFrame {
 	private final ActionPanel actionPanel;
 	private final PlayersInfoPanel pInfoPanel;
 	private final StatusPanel statusPanel;
+	private int nPlayers;
+	private GameFrame me;
 	
 	
 	public GameFrame(int nPlayers){
 		super("Game");
+		this.nPlayers = nPlayers;
+		me = this;
 		this.setLayout(null);
 		Dimension size = ResizeUtils.getBestFrameFor(1000, 750);
 		setSize(size);
@@ -61,7 +68,39 @@ public final class GameFrame extends JFrame {
 		
 		StateMachine.startGame(nPlayers, gameBoard, spaceVisualizer, actionPanel, pInfoPanel, statusPanel);
 		
+		//(0.1625x, 0.1x)
+		Dimension vM = new Dimension((int)(0.1625*size.width),(int)(0.1*size.width));
+		Dimension bestVM = ResizeUtils.getBestFrameFitting(1, 1, vM);
+		JIButton menuButton = new JIButton("assets/menuButton.png");
+		menuButton.setBounds((int)statusPanel.getBounds().getMaxX()+(vM.width-bestVM.width)/2, 
+				(vM.height-bestVM.height)/2, bestVM.width, bestVM.height);
+		
+		menuButton.addActionListener(new CloserListener());
+		getContentPane().add(menuButton);
+		
 		repaint();
 		this.setLayout(null);
+	}
+	
+	public void replay(){
+		GameFrame menu = me;
+        me = null;
+        menu.dispose();
+        GameFrame fr = new GameFrame(nPlayers);
+		fr.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+	public void toMenu(){
+		GameFrame menu = me;
+        me = null;
+        menu.dispose();
+        MainMenu fr = new MainMenu();
+		fr.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+	public class CloserListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			toMenu();
+		}
 	}
 }

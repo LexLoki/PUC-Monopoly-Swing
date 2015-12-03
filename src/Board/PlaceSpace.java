@@ -26,6 +26,7 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 	private GamePlayer owner = null;
 	private final Rectangle rectMark;
 	private final PlaceModel m;
+	private boolean hipoteca = false;
 	
 	public PlaceSpace(Dimension d, PlaceModel model, int local){
 		super(d, local);
@@ -70,6 +71,28 @@ public class PlaceSpace extends BoardSpace implements MouseListener {
 		else
 			m.setOwner(null);
 		this.repaint();
+	}
+	
+	public boolean isMortgaged(){
+		return hipoteca;
+	}
+	
+	public void freeMortgage(){
+		owner.buy(getMortgagePayment());
+		hipoteca = false;
+	}
+	
+	public void mortgage(){
+		owner.earn(getMortgageEarn());
+		hipoteca = true;
+	}
+	
+	private int getMortgageEarn(){
+		return this.getValue();
+	}
+	
+	public int getMortgagePayment(){
+		return 12*this.getValue()/10;
 	}
 	
 	public int getTax(){

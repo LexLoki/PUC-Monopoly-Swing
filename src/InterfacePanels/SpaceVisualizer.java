@@ -2,6 +2,7 @@ package InterfacePanels;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
@@ -53,6 +54,11 @@ public class SpaceVisualizer extends JPanel {
 					g.setColor(pp.getColor());
 					((Graphics2D)g).setStroke(new BasicStroke(3));
 					g.drawRect(0, 0, d.width, d.height);
+				}
+				if(bSpace.isMortgaged()){
+					//Not working
+					g.setFont(new Font("Sansserif", Font.PLAIN, 24));
+					g.drawString("H", 50, 50);
 				}
 			}
 			else if(actualBoardSpace instanceof SorteRevesSpace){

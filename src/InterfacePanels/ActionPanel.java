@@ -26,12 +26,14 @@ public final class ActionPanel extends JPanel {
 	static final String passText = "Pass";
 	static final String okText = "Ok";
 	static final String hipText = "Mortgage";
+	static final String freeHipText = "Free Mortgage";
 	static final String sellText = "Sell";
 	static final String houseText = "House";
 	
 	//private BoardSpace actualBoardSpace;
 	private JButton buyButton;
 	private JButton passButton;
+	private JButton mortgageButton;
 	private PlaceSpace actualSpace;
 	
 	public ActionPanel(Dimension d){
@@ -42,7 +44,7 @@ public final class ActionPanel extends JPanel {
 		buyButton.setBackground(Color.RED);
 		buyButton.setFont(new Font("Sansserif", Font.PLAIN, 24));
 		int butWidth = d.width*9/10;
-		int butHeight = d.height*9/20;
+		int butHeight = d.height*9/40;
 		
 		buyButton.setBounds((d.width-butWidth)/2, (d.height/2-butHeight)/2, butWidth, butHeight);
 		buyButton.addActionListener(new BuyListener());
@@ -54,6 +56,12 @@ public final class ActionPanel extends JPanel {
 		passButton.addActionListener(new PassListener());
 		this.add(passButton);
 		passButton.setVisible(false);
+		
+		mortgageButton = new JButton(hipText);
+		mortgageButton.setBounds((d.width-butWidth)/2, (d.height-butHeight)/2, butWidth, butHeight);
+		mortgageButton.addActionListener(new MortgageListener());
+		this.add(mortgageButton);
+		mortgageButton.setVisible(false);
 		
 		//buyButton.setVisible(true);
 		this.setLayout(null);
@@ -79,13 +87,21 @@ public final class ActionPanel extends JPanel {
 		}
 	}
 	
-	public void activateManagement(PlaceSpace p, Boolean canBuyHouse){
+	public void activateManagement(PlaceSpace p, Boolean canBuyHouse, Boolean canFreeMortgage){
 		passButton.setText(sellText);
 		passButton.setVisible(true);
 		actualSpace = p;
 		if(canBuyHouse){
 			buyButton.setText(houseText);
 			buyButton.setVisible(true);
+		}
+		if(!p.isMortgaged()){
+			mortgageButton.setText(hipText);
+			mortgageButton.setVisible(true);
+		}
+		else if(canFreeMortgage){
+			mortgageButton.setText(freeHipText);
+			mortgageButton.setVisible(true);
 		}
 	}
 	
@@ -96,6 +112,7 @@ public final class ActionPanel extends JPanel {
 	public void desactivate(){
 		buyButton.setVisible(false);
 		passButton.setVisible(false);
+		mortgageButton.setVisible(false);
 	}
 	
 //	public void setBoardSpace(BoardSpace space){
@@ -119,4 +136,9 @@ public final class ActionPanel extends JPanel {
             StateMachine.passSpace(actualSpace);
         }
     }
+	private class MortgageListener implements ActionListener {
+		public void actionPerformed(ActionEvent e){
+			StateMachine.mortgageSpace(actualSpace);
+		}
+	}
 }

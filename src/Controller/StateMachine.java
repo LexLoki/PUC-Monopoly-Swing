@@ -1,4 +1,8 @@
 package Controller;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import Board.Board;
 import Board.BoardSpace;
 import Board.CompanySpace;
@@ -12,6 +16,7 @@ import InterfacePanels.PlayersInfoPanel;
 import InterfacePanels.SpaceVisualizer;
 import InterfacePanels.StatusPanel;
 import Model.SorteRevesModel;
+import PreGame.GameFrame;
 
 public class StateMachine {
 	
@@ -60,6 +65,9 @@ public class StateMachine {
 	static public void passSpace(PlaceSpace space){
 		sharedInstance.handlePassSpace(space);
 	}
+	static public void mortgageSpace(PlaceSpace space){
+		sharedInstance.handleMortgage(space);
+	}
 	static public void mouseOver(BoardSpace b){
 		sharedInstance.handleMouseOver(b);
 	}
@@ -71,6 +79,13 @@ public class StateMachine {
 	}
 	static public GamePlayer[] getPlayers(){
 		return sharedInstance.gameBoard.getPlayers();
+	}
+	static public int getLastDiceValue(){
+		return sharedInstance.getMyLastDiceValue();
+	}
+	
+	private int getMyLastDiceValue(){
+		return this.lastDice;
 	}
 	
 	//Handle Pass turn and sell action
@@ -109,15 +124,21 @@ public class StateMachine {
 			actionPanel.desactivate();
 			spaceVisualizer.setBoardSpace(p);
 			if(playerIndex == this.playerIndex){
-				Boolean canBuy=false;
-				if(p instanceof TerritorySpace){
-					TerritorySpace t = (TerritorySpace)p;
-					if(gameBoard.getPlayer(playerIndex).canBuyHouseFor(t))
-						canBuy = true;
-				}
-				actionPanel.activateManagement(p, canBuy);
+				checkCanBuy(p);
 			}
 		}
+	}
+	
+	private void checkCanBuy(PlaceSpace p){
+		Boolean canBuy=false, mortOk = false;
+		GamePlayer pl = gameBoard.getPlayer(playerIndex);
+		if(p instanceof TerritorySpace){
+			TerritorySpace t = (TerritorySpace)p;
+			mortOk = t.getHouseQuant()==0;
+			if(pl.canBuyHouseFor(t))
+				canBuy = true;
+		}
+		actionPanel.activateManagement(p, canBuy, pl.canBuy(p.getMortgagePayment())&&mortOk);
 	}
 	
 	private void handleEndAction(){
@@ -153,10 +174,12 @@ public class StateMachine {
 			else if(b instanceof EffectSpace){
 				//do a confirmation phase
 				int value = ((EffectSpace)b).getValue();
+				GamePlayer pl = gameBoard.getPlayer(playerIndex);
 				if(value==0){
 					gameBoard.goToPrison(playerIndex);
+					pl.goToPrison();
 				}else{
-					gameBoard.getPlayer(playerIndex).earn(value);
+					pl.earn(value);
 				}
 				nextPlayer();
 			}
@@ -243,8 +266,30 @@ public class StateMachine {
 		if(gp.getBalance()<0){
 			gp.sellEverything();
 			value += gp.getBalance();
+			GamePlayer winner = finish();
+			if(winner != null){
+				showWinDialog(winner.getId());
+			}
 		}
 		p.getOwner().earn(value);
+	}
+	
+	private void handleMortgage(PlaceSpace p){
+		actionPanel.desactivate();
+		if(p.isMortgaged()) p.freeMortgage(); else p.mortgage();
+		checkCanBuy(p);
+	}
+	
+	private GamePlayer finish(){
+		GamePlayer[] players = gameBoard.getPlayers();
+		GamePlayer hasFound = null;
+		for(GamePlayer pl : players)
+			if(!pl.isBroke())
+				if(hasFound != null)
+					return null;
+				else
+					hasFound = pl;
+		return hasFound;
 	}
 	
 	public int getPlayerIndex(){
@@ -260,5 +305,19 @@ public class StateMachine {
 		statusPanel.setTurn(playerIndex);
 		actionPanel.desactivate();
 		sharedInstance.transitionToState(States.DiceRoll);
+	}
+	
+	private void showWinDialog(int winnerIndex){
+		//JOptionPane p = new JOptionPane();
+		GameFrame gf = (GameFrame)SwingUtilities.getWindowAncestor(gameBoard);
+		int result = JOptionPane.showConfirmDialog(null, 
+				"Player "+GlobalData.getInstance().getPlayerColorName(winnerIndex)+
+				" won the match, play again?", "Game Finished", JOptionPane.YES_NO_OPTION);
+		if(result == JOptionPane.YES_OPTION){
+			gf.replay();
+		}
+		else{
+			gf.toMenu();
+		}
 	}
 }

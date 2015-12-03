@@ -1,3 +1,4 @@
+package PreGame;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
@@ -29,6 +30,18 @@ class ResizeUtils {
 		
 		Dimension size = GlobalData.getInstance().getScreenSize();
 		size = new Dimension(size.width*9/10, size.height*85/100);
+		float sx = (float)(size.width) / width;
+		float sy = (float)(size.height) / height;
+		float s = sx > sy ? sy : sx;
+		return new Dimension((int)(s*width), (int)(s*height));
+	}
+	
+	static Dimension getBestFrameFitting(Dimension d,Dimension out){
+		return getBestFrameFitting(d.width, d.height, out);
+	}
+	
+	static Dimension getBestFrameFitting(int width, int height,Dimension out){
+		Dimension size  = out;
 		float sx = (float)(size.width) / width;
 		float sy = (float)(size.height) / height;
 		float s = sx > sy ? sy : sx;

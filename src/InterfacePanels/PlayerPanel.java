@@ -46,14 +46,14 @@ class PlayerPanel extends JPanel implements MouseListener {
 		g.drawRoundRect(0, 0, getWidth(), getHeight(), 6, 6);
 		//g.drawImage(((PlaceSpace)actualBoardSpace).getImage(), 0, 0, d.width, d.height, null);
 		updateSpaces();
+		int h = getHeight();
 		int ew = getWidth()/20;
+		g.setColor(StateMachine.getPlayer(playerIndex).getColor());
+		g.fillRect(0, 0, ew, h);
 		if(ownedSpaces.length > 0){
 			Image img = ownedSpaces[0].getImage();
-			int h = getHeight();
 			int w = img.getWidth(null) * h / img.getHeight(null);
 			imgSize = w;
-			g.setColor(StateMachine.getPlayer(playerIndex).getColor());
-			g.fillRect(0, 0, ew, h);
 			for(int i=0; i<ownedSpaces.length; i++){
 				img = ownedSpaces[i].getImage();
 				g.drawImage(img, (i+1)*ew, 0, w, h, null);
